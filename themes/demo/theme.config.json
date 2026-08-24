@@ -1,0 +1,20 @@
+{
+  "name": "The Green Fork",
+  "colors": {
+    "primary": "#2E5D34",
+    "accent": "#C96F4A",
+    "bg": "#FAF7F0",
+    "surface": "#FFFFFF",
+    "text": "#24301F",
+    "muted": "#7A8271"
+  },
+  "fonts": {
+    "heading": "Playfair Display",
+    "body": "Inter",
+    "headingWeights": "500;600;700",
+    "bodyWeights": "400;500;600"
+  },
+  "logoUrl": "",
+  "heroImageUrl": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1600&q=70",
+  "tagline": "Fresh, seasonal & honest — farm to table since 2016"
+}

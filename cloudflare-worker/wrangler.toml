@@ -1,0 +1,12 @@
+name = "menusheet-reconciler"
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+account_id = "711ec981986c84d300e11828528f64ec"
+
+[triggers]
+crons = ["30 18 * * *"] # 00:00 IST
+
+[vars]
+ADMIN_APPS_SCRIPT_URL = "REPLACE_WITH_ADMIN_WEB_APP_EXEC_URL"
+# Do NOT put SHARED_SECRET here. Set it as an encrypted secret:
+#   wrangler secret put SHARED_SECRET

@@ -1,0 +1,161 @@
+import type { Metadata, Viewport } from 'next';
+import { notFound } from 'next/navigation';
+import MenuPageClient from '@/components/public/MenuPageClient';
+import { getRestaurant, loadManifest, loadMenuSnapshot } from '@/lib/staticData';
+import { isExpired } from '@/lib/date';
+import { siteUrl } from '@/lib/siteUrl';
+import { getTheme } from '@/themes';
+import type { MenuPayload, MenuItem } from '@/lib/types';
+
+export const dynamicParams = false;
+
+interface Params {
+  params: { id: string };
+}
+
+export function generateStaticParams() {
+  try {
+    return loadManifest().restaurants.map((r) => ({ id: r.restaurant_id }));
+  } catch {
+    return [];
+  }
+}
+
+function buildInitialPayload(id: string): { payload: MenuPayload; record: ReturnType<typeof getRestaurant> } {
+  const record = getRestaurant(id);
+  if (!record) return { payload: { status: 'inactive' }, record: null };
+  if (!record.active) return { payload: { status: 'inactive' }, record };
+  if (isExpired(record.expiry_date)) return { payload: { status: 'expired' }, record };
+  const snapshot = loadMenuSnapshot(id);
+  if (snapshot) return { payload: snapshot, record };
+  return { payload: { status: 'ok', restaurant: undefined, menu: [] as MenuItem[] }, record };
+}
+
+function googleFontsUrl(theme: ReturnType<typeof getTheme>): string | null {
+  const f = theme.config.fonts;
+  const headingWeights = f.headingWeights || '400;600;700';
+  const bodyWeights = f.bodyWeights || '400;500;600';
+  if (!f.heading && !f.body) return null;
+  const families: string[] = [];
+  if (f.heading) families.push(`family=${f.heading.replace(/ /g, '+')}:wght@${headingWeights}`);
+  if (f.body && f.body !== f.heading) families.push(`family=${f.body.replace(/ /g, '+')}:wght@${bodyWeights}`);
+  if (!families.length) return null;
+  return `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap`;
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const record = getRestaurant(params.id);
+  if (!record) return { title: 'Menu not found' };
+  const theme = getTheme(record.theme_key);
+  const name = theme.config.name || record.restaurant_name;
+  const description =
+    `View the digital menu for ${name}` +
+    (theme.config.tagline ? ` — ${theme.config.tagline}` : '') +
+    '. Scan, browse and order with MenuSheet.';
+  const url = `${siteUrl()}/r/${params.id}`;
+  const images = theme.config.heroImageUrl ? [theme.config.heroImageUrl] : undefined;
+  return {
+    title: `${name} — Menu`,
+    description,
+    alternates: { canonical: url },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: 'website',
+      title: `${name} — Menu`,
+      description,
+      url,
+      siteName: 'MenuSheet',
+      images,
+    },
+    twitter: {
+      card: images ? 'summary_large_image' : 'summary',
+      title: `${name} — Menu`,
+      description,
+      images,
+    },
+  };
+}
+
+export async function generateViewport({ params }: Params): Promise<Viewport> {
+  const record = getRestaurant(params.id);
+  const theme = getTheme(record?.theme_key || 'demo');
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    themeColor: theme.config.colors.primary,
+  };
+}
+
+export default function RestaurantMenuPage({ params }: Params) {
+  const record = getRestaurant(params.id);
+  if (!record) notFound();
+  const theme = getTheme(record.theme_key);
+  const { payload } = buildInitialPayload(params.id);
+  const fontsUrl = googleFontsUrl(theme);
+
+  const jsonLd = buildJsonLd(params.id, record.restaurant_name, theme.config.name, theme.config.heroImageUrl, payload.menu ?? []);
+
+  return (
+    <>
+      {fontsUrl ? (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link rel="stylesheet" href={fontsUrl} />
+        </>
+      ) : null}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <MenuPageClient
+        restaurantId={params.id}
+        themeKey={record.theme_key}
+        appscriptUrl={record.appscript_url || ''}
+        initialPayload={payload}
+        fallbackName={record.restaurant_name}
+      />
+    </>
+  );
+}
+
+function buildJsonLd(
+  id: string,
+  sheetName: string,
+  themeName: string,
+  heroImage?: string,
+  menu: MenuItem[] = []
+) {
+  const name = themeName || sheetName;
+  const url = `${siteUrl()}/r/${id}`;
+  const categories: string[] = [];
+  for (const item of menu) {
+    if (!categories.includes(item.category)) categories.push(item.category);
+  }
+  const sections = categories.map((cat) => ({
+    '@type': 'MenuSection',
+    name: cat,
+    hasMenuItem: menu
+      .filter((m) => m.category === cat)
+      .map((m) => ({
+        '@type': 'MenuItem',
+        name: m.name,
+        description: m.description || undefined,
+        offers: { '@type': 'Offer', price: m.price, priceCurrency: 'INR' },
+        suitableForDiet: m.isVeg ? 'https://schema.org/VegetarianDiet' : undefined,
+      })),
+  }));
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Restaurant',
+    name,
+    url,
+    image: heroImage,
+    acceptsReservations: 'False',
+    hasMenu: {
+      '@type': 'Menu',
+      name: `${name} Menu`,
+      hasMenuSection: sections,
+    },
+  };
+}

@@ -1,0 +1,19 @@
+id,category,name,description,price,image_url,is_veg,is_available,sort_order
+M001,Starters,Paneer Tikka,"Charred cottage cheese, mint chutney",320,,TRUE,TRUE,1
+M002,Starters,Chicken 65,"Crispy fried, curry leaf & chilli",340,,FALSE,TRUE,2
+M003,Main Course,Dal Makhani,"Slow-cooked black lentils, butter",280,,TRUE,TRUE,3
+M004,Main Course,Butter Chicken,"Tomato gravy, cream, tandoori chicken",380,,FALSE,TRUE,4
+M005,Beverages,Masala Chai,"House spice blend",80,,TRUE,TRUE,5
+M006,Desserts,Gulab Jamun,"Warm, rose syrup, pistachio",120,,TRUE,FALSE,6
+
+# Copy these header rows into two tabs of the restaurant's Google Sheet:
+#   Tab "Menu"     → the id..sort_order columns above (one dish per row)
+#   Tab "Settings" → Key/Value pairs as shown below
+#
+# Settings tab:
+# Key             | Value
+# ----------------|--------------------------------------
+# menu_active     | TRUE
+# expiry_date     | 2026-12-31
+# restaurant_name | My Restaurant Name
+# last_synced_at  | (left blank — written by the Worker)
