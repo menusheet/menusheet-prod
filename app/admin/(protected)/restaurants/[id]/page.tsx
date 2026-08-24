@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import RestaurantDetail from '@/components/admin/RestaurantDetail';
 import { loadManifest } from '@/lib/staticData';
 
-export const dynamicParams = false;
-
 export const metadata: Metadata = {
   title: 'Edit restaurant',
   robots: { index: false, follow: false },

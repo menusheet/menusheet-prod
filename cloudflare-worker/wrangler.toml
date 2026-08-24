@@ -7,6 +7,6 @@ account_id = "711ec981986c84d300e11828528f64ec"
 crons = ["30 18 * * *"] # 00:00 IST
 
 [vars]
-ADMIN_APPS_SCRIPT_URL = "REPLACE_WITH_ADMIN_WEB_APP_EXEC_URL"
+ADMIN_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxnc3D0CP-LRQKFehDU4FaytuDYJzSE8wb7Szisgsu-KHE9EsLeE05cq-UhcqTLkxW1rw/exec"
 # Do NOT put SHARED_SECRET here. Set it as an encrypted secret:
 #   wrangler secret put SHARED_SECRET
