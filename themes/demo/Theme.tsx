@@ -91,16 +91,27 @@ function ItemCard({ item }: { item: MenuItem }) {
 }
 
 function Skeleton() {
+  const pulse = 'rgba(0,0,0,0.06)';
+  const pulseLight = 'rgba(0,0,0,0.04)';
   return (
     <div className="mx-auto max-w-md space-y-4 px-4 py-6">
-      <div className="h-44 animate-pulse rounded-2xl" style={{ background: 'rgba(0,0,0,0.06)' }} />
-      {[0, 1, 2].map((i) => (
-        <div key={i} className="flex gap-3">
-          <div className="h-20 w-20 animate-pulse rounded-xl" style={{ background: 'rgba(0,0,0,0.06)' }} />
+      <div className="h-44 animate-pulse rounded-2xl" style={{ background: pulse }} />
+      <div className="space-y-2 px-1">
+        <div className="h-3 w-1/3 animate-pulse rounded" style={{ background: pulseLight }} />
+      </div>
+      {[0, 1, 2, 3].map((i) => (
+        <div key={i} className="flex gap-3 rounded-2xl p-3" style={{ background: 'var(--ms-surface)', boxShadow: '0 1px 3px rgba(36,48,31,0.08)' }}>
+          <div className="h-20 w-20 shrink-0 animate-pulse rounded-xl" style={{ background: pulse }} />
           <div className="flex-1 space-y-2 py-1">
-            <div className="h-4 w-2/3 animate-pulse rounded" style={{ background: 'rgba(0,0,0,0.06)' }} />
-            <div className="h-3 w-full animate-pulse rounded" style={{ background: 'rgba(0,0,0,0.05)' }} />
-            <div className="h-3 w-1/3 animate-pulse rounded" style={{ background: 'rgba(0,0,0,0.05)' }} />
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-4 shrink-0 animate-pulse rounded" style={{ background: pulse }} />
+              <div className="h-4 w-2/3 animate-pulse rounded" style={{ background: pulse }} />
+            </div>
+            <div className="h-3 w-full animate-pulse rounded" style={{ background: pulseLight }} />
+            <div className="flex items-center justify-between">
+              <div className="h-3 w-1/4 animate-pulse rounded" style={{ background: pulseLight }} />
+              <div className="h-4 w-12 animate-pulse rounded" style={{ background: 'color-mix(in srgb, var(--ms-primary) 12%, transparent)' }} />
+            </div>
           </div>
         </div>
       ))}

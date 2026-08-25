@@ -78,14 +78,20 @@ Requirements:
 6. If `status === "inactive"` render a clean "Menu temporarily unavailable" state.
 7. If `status === "expired"` render a neutral "This menu is no longer active" state (no
    mention of billing/payment to end customers).
-8. If `status === "loading"` render a lightweight skeleton loader matching the theme's colors.
+8. If `status === "loading"` render a skeleton loader that matches the theme's visual style:
+   - Pulsing placeholders (`animate-pulse`) for hero image, category header, and 3-4 menu item cards.
+   - Each skeleton card should mirror the real card layout: image placeholder (left), text lines (right),
+     and a price placeholder using `color-mix(in srgb, var(--ms-primary) 12%, transparent)`.
+   - Use the theme's CSS variables (`--ms-surface`, `--ms-primary`) so the skeleton blends with the
+     theme colors. Avoid hardcoded colors where possible.
+   - The skeleton is the ONLY thing shown while the menu loads — make it feel polished.
 9. Fully mobile-first — this is scanned on phones via QR code. Large tap targets, readable
    type, sticky category nav if the menu is long.
 10. Include a subtle footer: "Powered by MenuSheet" linking to the MenuSheet landing page.
 11. Only use Tailwind utility classes plus the two hex colors provided as CSS variables —
-    do not introduce a global stylesheet change.
+     do not introduce a global stylesheet change.
 12. Output exactly two files: `Theme.tsx` and `theme.config.json` (containing the colors,
-    fonts, logo, hero image, tagline). No other files, no explanations outside the code.
+     fonts, logo, hero image, tagline). No other files, no explanations outside the code.
 ```
 
 Reference implementation: [`demo/Theme.tsx`](demo/Theme.tsx) — copy its structure

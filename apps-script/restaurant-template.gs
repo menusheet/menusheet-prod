@@ -21,9 +21,90 @@
  *                   last_synced_at}}
  *
  *  Expected sheet tabs: "Menu" and "Settings" (see docs/sheet-templates/).
+ *
+ *  First time setup:
+ *    Run initSheet() from the Apps Script editor to create the Menu
+ *    and Settings tabs with headers and sample data.
  */
 
 var SHARED_SECRET = 'REPLACE_ME';
+
+// ----------------------------------------------------------------
+//  initSheet — run once from the editor to set up the spreadsheet
+// ----------------------------------------------------------------
+
+function initSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // ---- Menu tab ------------------------------------------------
+  var menuSh = ss.getSheetByName('Menu');
+  if (!menuSh) {
+    menuSh = ss.insertSheet('Menu');
+  }
+  var menuHeaders = ['id', 'category', 'name', 'description', 'price', 'image_url', 'is_veg', 'is_available', 'sort_order'];
+  var existingMenuHeaders = [];
+  if (menuSh.getLastRow() > 0) {
+    existingMenuHeaders = menuSh.getRange(1, 1, 1, menuHeaders.length).getValues()[0].map(function (v) { return String(v).trim().toLowerCase(); });
+  }
+  var menuHeaderMatch = true;
+  for (var h = 0; h < menuHeaders.length; h++) {
+    if (existingMenuHeaders[h] !== menuHeaders[h]) { menuHeaderMatch = false; break; }
+  }
+  if (!menuHeaderMatch) {
+    menuSh.clear();
+    menuSh.getRange(1, 1, 1, menuHeaders.length).setValues([menuHeaders]).setFontWeight('bold').setBackground('#f0f0f0');
+    menuSh.setFrozenRows(1);
+    var sampleMenu = [
+      ['M001', 'Starters',     'Paneer Tikka',      'Charred cottage cheese, mint chutney',                320, '', 'TRUE',  'TRUE',  1],
+      ['M002', 'Starters',     'Chicken 65',         'Crispy fried, curry leaf & chilli',                   340, '', 'FALSE', 'TRUE',  2],
+      ['M003', 'Main Course',  'Dal Makhani',        'Slow-cooked black lentils, butter',                   280, '', 'TRUE',  'TRUE',  3],
+      ['M004', 'Main Course',  'Butter Chicken',     'Tomato gravy, cream, tandoori chicken',               380, '', 'FALSE', 'TRUE',  4],
+      ['M005', 'Beverages',    'Masala Chai',        'House spice blend',                                    80, '', 'TRUE',  'TRUE',  5],
+      ['M006', 'Desserts',     'Gulab Jamun',        'Warm, rose syrup, pistachio',                         120, '', 'TRUE',  'FALSE', 6]
+    ];
+    menuSh.getRange(2, 1, sampleMenu.length, menuHeaders.length).setValues(sampleMenu);
+    menuSh.autoResizeColumns(1, menuHeaders.length);
+    Logger.log('Menu tab created with ' + sampleMenu.length + ' sample items.');
+  } else {
+    Logger.log('Menu tab already has correct headers — skipped.');
+  }
+
+  // ---- Settings tab -------------------------------------------
+  var settingsSh = ss.getSheetByName('Settings');
+  if (!settingsSh) {
+    settingsSh = ss.insertSheet('Settings');
+  }
+  var existingSettingsRows = settingsSh.getLastRow();
+  var settingsHasKey = false;
+  if (existingSettingsRows > 0) {
+    var firstCol = settingsSh.getRange(1, 1, existingSettingsRows, 1).getValues();
+    for (var r = 0; r < firstCol.length; r++) {
+      if (String(firstCol[r][0]).trim().toLowerCase() === 'key') { settingsHasKey = true; break; }
+    }
+  }
+  if (!settingsHasKey) {
+    settingsSh.clear();
+    settingsSh.getRange(1, 1, 1, 2).setValues([['Key', 'Value']]).setFontWeight('bold').setBackground('#f0f0f0');
+    settingsSh.setFrozenRows(1);
+    var defaultExpiry = new Date();
+    defaultExpiry.setDate(defaultExpiry.getDate() + 30);
+    var expiryStr = defaultExpiry.toISOString().slice(0, 10);
+    var settingsRows = [
+      ['menu_active',     'TRUE'],
+      ['expiry_date',     expiryStr],
+      ['restaurant_name', 'My Restaurant'],
+      ['last_synced_at',  '']
+    ];
+    settingsSh.getRange(2, 1, settingsRows.length, 2).setValues(settingsRows);
+    settingsSh.autoResizeColumns(1, 2);
+    Logger.log('Settings tab created with defaults (expiry ' + expiryStr + ').');
+  } else {
+    Logger.log('Settings tab already has a Key header — skipped.');
+  }
+
+  SpreadsheetApp.flush();
+  Logger.log('initSheet complete. Delete the sample menu items and fill in real data.');
+}
 
 function doGet(e) {
   var action = (e && e.parameter && e.parameter.action) || '';

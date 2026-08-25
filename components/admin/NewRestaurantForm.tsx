@@ -12,6 +12,7 @@ import {
   Field,
   PrimaryButton,
   SecondaryButton,
+  Select,
   Spinner,
   inputClass,
 } from '@/components/admin/ui';
@@ -201,12 +202,7 @@ function Form() {
               <input value={sheetId} onChange={(e) => setSheetId(e.target.value)} className={`${inputClass} font-mono text-xs`} />
             </Field>
             <Field label="Theme key" hint={`Installed themes: ${themeOptions.join(', ')}. Add new ones under themes/.`}>
-              <input list="theme-keys" value={themeKey} onChange={(e) => setThemeKey(e.target.value)} className={inputClass} />
-              <datalist id="theme-keys">
-                {themeOptions.map((t) => (
-                  <option key={t} value={t} />
-                ))}
-              </datalist>
+              <Select value={themeKey} onChange={setThemeKey} options={themeOptions} placeholder="Choose a theme…" />
             </Field>
           </div>
 

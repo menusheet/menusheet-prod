@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { IconX } from '@/components/icons';
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -261,6 +261,121 @@ export function Toast({ message }: { message: string | null }) {
   return (
     <div className="fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white shadow-float">
       {message}
+    </div>
+  );
+}
+
+export function ConfirmDialog({
+  open,
+  title,
+  message,
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
+  danger = false,
+  onConfirm,
+  onCancel,
+}: {
+  open: boolean;
+  title: string;
+  message: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  danger?: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, onCancel]);
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[70] grid place-items-center p-4">
+      <div className="absolute inset-0 bg-gray-950/40 backdrop-blur-sm" onClick={onCancel} />
+      <div className="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-float">
+        <h3 className="text-lg font-bold tracking-tight">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-gray-500">{message}</p>
+        <div className="mt-5 flex justify-end gap-3">
+          <SecondaryButton onClick={onCancel}>{cancelLabel}</SecondaryButton>
+          <button
+            onClick={onConfirm}
+            className={`inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-sm transition active:scale-[0.98] ${
+              danger ? 'bg-red-600 hover:bg-red-700' : 'bg-forest-900 hover:bg-forest-800'
+            }`}
+          >
+            {confirmLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Select({
+  value,
+  onChange,
+  options,
+  placeholder = 'Select…',
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+  placeholder?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className={`flex w-full items-center justify-between rounded-xl border bg-white px-3.5 py-2.5 text-sm outline-none transition ${
+          open ? 'border-forest-500 ring-2 ring-forest-100' : 'border-gray-200 focus:border-forest-500 focus:ring-2 focus:ring-forest-100'
+        }`}
+      >
+        <span className={value ? 'text-gray-900' : 'text-gray-400'}>
+          {value || placeholder}
+        </span>
+        <svg className={`h-4 w-4 shrink-0 text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      {open ? (
+        <div className="absolute z-10 mt-1 w-full overflow-auto rounded-xl border border-gray-200 bg-white py-1 shadow-float max-h-56">
+          {options.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => { onChange(opt); setOpen(false); }}
+              className={`flex w-full items-center px-3.5 py-2 text-sm transition text-left ${
+                value === opt
+                  ? 'bg-forest-50 font-semibold text-forest-800'
+                  : 'text-gray-700 hover:bg-canvas'
+              }`}
+            >
+              {opt}
+            </button>
+          ))}
+          {options.length === 0 ? (
+            <p className="px-3.5 py-2 text-sm text-gray-400">No options</p>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

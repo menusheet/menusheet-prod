@@ -74,7 +74,7 @@ export default function MenuPageClient({
   fallbackName,
 }: Props) {
   const theme = getTheme(themeKey);
-  const [payload, setPayload] = useState<MenuPayload>(initialPayload);
+  const [payload, setPayload] = useState<MenuPayload>({ ...initialPayload, status: 'loading' });
   const [updatedAt, setUpdatedAt] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const mounted = useRef(true);

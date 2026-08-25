@@ -14,13 +14,14 @@ import {
   Pill,
   PrimaryButton,
   SecondaryButton,
+  Select,
   Spinner,
   Toast,
   Toggle,
   inputClass,
 } from '@/components/admin/ui';
 import QRCodeModal from '@/components/admin/QRCodeModal';
-import { IconCheck, IconCopy, IconQr } from '@/components/icons';
+import { IconCheck, IconCopy, IconQr, IconSheet } from '@/components/icons';
 
 export default function RestaurantDetail({ restaurantId }: { restaurantId: string }) {
   const [record, setRecord] = useState<RestaurantRecord | null>(null);
@@ -220,12 +221,7 @@ export default function RestaurantDetail({ restaurantId }: { restaurantId: strin
               <input value={sheetId} onChange={(e) => setSheetId(e.target.value)} className={`${inputClass} font-mono text-xs`} />
             </Field>
             <Field label="Theme key" hint={`Installed: ${themeOptions.join(', ')}`}>
-              <input list="theme-keys-detail" value={themeKey} onChange={(e) => setThemeKey(e.target.value)} className={inputClass} />
-              <datalist id="theme-keys-detail">
-                {themeOptions.map((t) => (
-                  <option key={t} value={t} />
-                ))}
-              </datalist>
+              <Select value={themeKey} onChange={setThemeKey} options={themeOptions} placeholder="Choose a theme…" />
             </Field>
           </div>
 
@@ -263,6 +259,17 @@ export default function RestaurantDetail({ restaurantId }: { restaurantId: strin
               {copied ? <IconCheck className="h-4 w-4 text-forest-600" /> : <IconCopy className="h-4 w-4" />}
               {copied ? 'Copied!' : 'Copy URL'}
             </button>
+            {record.sheet_id ? (
+              <a
+                href={`https://docs.google.com/spreadsheets/d/${record.sheet_id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full border border-gray-200 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
+              >
+                <IconSheet className="h-4 w-4" />
+                Open Google Sheet
+              </a>
+            ) : null}
           </div>
 
           <div className="rounded-2xl bg-white p-6 shadow-card ring-1 ring-gray-100">

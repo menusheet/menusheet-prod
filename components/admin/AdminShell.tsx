@@ -161,10 +161,10 @@ function Sidebar({
           </Link>
         </div>
 
-        <div className="hidden border-t border-gray-100 px-5 py-3 lg:block">
+        {/* <div className="hidden border-t border-gray-100 px-5 py-3 lg:block">
           <p className="truncate text-xs font-semibold text-gray-700">{email}</p>
           <p className="text-[11px] text-gray-400">Operator</p>
-        </div>
+        </div> */}
       </aside>
 
       {mobileOpen ? (

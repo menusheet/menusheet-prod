@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import MenuPageClient from '@/components/public/MenuPageClient';
-import { getRestaurant, loadManifest, loadMenuSnapshot } from '@/lib/staticData';
+import { getRestaurant, loadManifest } from '@/lib/staticData';
 import { isExpired } from '@/lib/date';
 import { siteUrl } from '@/lib/siteUrl';
 import { getTheme } from '@/themes';
@@ -26,8 +26,6 @@ function buildInitialPayload(id: string): { payload: MenuPayload; record: Return
   if (!record) return { payload: { status: 'inactive' }, record: null };
   if (!record.active) return { payload: { status: 'inactive' }, record };
   if (isExpired(record.expiry_date)) return { payload: { status: 'expired' }, record };
-  const snapshot = loadMenuSnapshot(id);
-  if (snapshot) return { payload: snapshot, record };
   return { payload: { status: 'ok', restaurant: undefined, menu: [] as MenuItem[] }, record };
 }
 

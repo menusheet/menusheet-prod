@@ -6,9 +6,9 @@ require('dotenv').config({ path: '.env.local' });
  * MenuSheet build-time data sync.
  *
  * Runs as a `prebuild` step. Pulls the restaurant roster from the Admin
- * Apps Script and snapshots each active restaurant's current menu into
- * data/menus/{id}.json so `next build` can statically render real menu
- * content into /r/{id} pages.
+ * Apps Script into data/restaurants.json so `next build` can generate
+ * static /r/{id} pages. Menu data is NOT fetched at build time — it is
+ * fetched live from each restaurant's Apps Script on the client side.
  *
  * Never fails the build: if the Admin Sheet is unreachable it falls back
  * to the previously committed data/restaurants.json (or the demo seed).
@@ -18,7 +18,6 @@ const fs = require('fs');
 const path = require('path');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
-const MENUS_DIR = path.join(DATA_DIR, 'menus');
 const MANIFEST_PATH = path.join(DATA_DIR, 'restaurants.json');
 
 const ADMIN_APPS_SCRIPT_URL = process.env.ADMIN_APPS_SCRIPT_URL || '';
@@ -99,39 +98,7 @@ async function main() {
   fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2) + '\n');
   console.log(`[menusheet-sync] wrote data/restaurants.json (source=${source})`);
 
-  for (const row of rows) {
-    const id = String(row.restaurant_id);
-    const snapPath = path.join(MENUS_DIR, `${id}.json`);
-
-    if (!toBool(row.active) || isExpired(row.expiry_date)) {
-      console.log(`[menusheet-sync] ${id}: inactive/expired — keeping existing snapshot (if any)`);
-      continue;
-    }
-    if (!row.appscript_url) {
-      console.log(`[menusheet-sync] ${id}: no appscript_url (demo/local fixture) — snapshot untouched`);
-      continue;
-    }
-
-    const sep = String(row.appscript_url).includes('?') ? '&' : '?';
-    try {
-      const payload = await fetchJSON(`${row.appscript_url}${sep}action=getMenu`);
-      if (payload && payload.status === 'ok') {
-        const snapshot = {
-          restaurant: payload.restaurant || null,
-          menu: Array.isArray(payload.menu) ? payload.menu : [],
-          fetchedAt: new Date().toISOString(),
-        };
-        fs.writeFileSync(snapPath, JSON.stringify(snapshot, null, 2) + '\n');
-        console.log(`[menusheet-sync] ${id}: snapshotted ${snapshot.menu.length} item(s)`);
-      } else {
-        console.warn(`[menusheet-sync] ${id}: endpoint returned status=${payload && payload.status}`);
-      }
-    } catch (err) {
-      console.warn(`[menusheet-sync] ${id}: menu fetch failed (${err.message}) — keeping existing snapshot`);
-    }
-  }
-
-  console.log('[menusheet-sync] done');
+  console.log('[menusheet-sync] done — menu will be fetched live from Apps Script');
 }
 
 function demoRestaurantRow() {
