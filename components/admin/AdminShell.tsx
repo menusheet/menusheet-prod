@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { logoutUser } from '@/lib/firebaseAuth';
+import { logoutUser } from '@/lib/auth';
 import { useAuthGuard } from '@/lib/useAuthGuard';
 import {
   IconBell,

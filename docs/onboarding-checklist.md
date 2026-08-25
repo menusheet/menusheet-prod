@@ -7,13 +7,10 @@ work) plus operational runbooks for deploys, renewals and secret rotation.
 
 ## One-time platform setup (skip if already done)
 
-1. **Firebase project** — create at <https://console.firebase.google.com>, then:
-   - Hosting enabled (`firebase init hosting`, public dir `out`).
-   - Authentication → Sign-in method → enable **Google** and **Email/Password**.
+1. **Supabase project** — create at <https://supabase.com>, then:
+   - Authentication → Providers → enable **Email** (Email/Password).
    - Authentication → Users → create the operator account(s).
-   - Confirm your Hosting domain is listed under Authentication → Settings →
-     Authorized domains.
-   - Put the web config values into `.env.local` (`NEXT_PUBLIC_FIREBASE_*`).
+   - Settings → API → copy the Project URL and Publishable Key into `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`).
 2. **Admin Google Sheet** — copy `docs/sheet-templates/admin-restaurants.csv` into a new
    Google Sheet tab named `Restaurants`.
 3. **Admin Apps Script** — paste `apps-script/admin.gs` into that sheet's script editor,
@@ -22,9 +19,9 @@ work) plus operational runbooks for deploys, renewals and secret rotation.
    - Fill `ADMIN_APPS_SCRIPT_URL` in `wrangler.toml`.
    - `wrangler secret put SHARED_SECRET`
    - `wrangler deploy`
-5. **Frontend env** — fill `.env.local` from `.env.example` (site URL, Firebase keys,
+5. **Frontend env** — fill `.env.local` from `.env.example` (site URL, Supabase keys,
    allow-list, both Apps Script URL/secret pairs).
-6. Deploy once: `npm run build && firebase deploy --only hosting`.
+6. **Cloudflare Pages** — ensure you are logged into wrangler (`wrangler login`), then deploy once: `npm run deploy`.
 
 ---
 
@@ -61,7 +58,7 @@ work) plus operational runbooks for deploys, renewals and secret rotation.
 ### 5. Rebuild, redeploy, activate
 
 ```
-npm run build && firebase deploy --only hosting
+npm run deploy
 ```
 
 - Verify `https://<your-domain>/r/{restaurant_id}` renders.
@@ -117,5 +114,5 @@ trade-off). If it ever leaks:
 | Menu page shows baked snapshot, never updates | Wrong `appscript_url`, or Web App not re-deployed after code changes | Re-check the `/exec` URL; ensure latest deployment version |
 | Worker marks everything stale | Restaurant scripts still on old secret after rotation | Update each script per rotation runbook |
 | New restaurant 404s publicly | Added after last build | Rebuild + redeploy |
-| Admin login rejected despite valid Google account | Email not in allow-list | Add to `NEXT_PUBLIC_ADMIN_ALLOWED_EMAILS`, rebuild |
+| Admin login rejected despite valid email | Email not in allow-list | Add to `NEXT_PUBLIC_ADMIN_ALLOWED_EMAILS`, rebuild |
 | `getSettings` returns `unauthorized` | Secret mismatch between Worker/script | Align secrets, redeploy both sides |

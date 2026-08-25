@@ -1,12 +1,9 @@
 const nextConfig = {
-  // Static export must be OFF during `next dev`: the dev server has no
-  // prerender manifest, so dynamic /r/[id] routes would 500 with
-  // "missing generateStaticParams". Production builds (`next build`,
-  // NODE_ENV=production) always export to out/ for Firebase Hosting.
   output: process.env.NODE_ENV === 'development' ? undefined : 'export',
   images: {
     unoptimized: true,
   },
+  allowedDevOrigins: ['172.20.10.6'],
 };
 
 module.exports = nextConfig;

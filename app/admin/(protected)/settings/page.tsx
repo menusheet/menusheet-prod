@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'your-firebase-project-id';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '(not set)';
 const allowedEmails = process.env.NEXT_PUBLIC_ADMIN_ALLOWED_EMAILS || '(not set)';
 const secretConfigured = Boolean(process.env.NEXT_PUBLIC_SHARED_SECRET);
 
@@ -21,23 +21,23 @@ export default function AdminSettingsPage() {
         </p>
       </div>
 
-      <Card title="Admin access (Firebase Authentication)">
+      <Card title="Admin access (Supabase Authentication)">
         <p className="text-sm leading-relaxed text-gray-600">
-          Sign-in runs through Firebase Auth (Google + Email/Password). After sign-in, the account email
+          Sign-in runs through Supabase Auth (Email/Password). After sign-in, the account email
           must be on the allow-list or the dashboard signs it out immediately. Manage actual user
-          accounts in the Firebase console:
+          accounts in the Supabase dashboard:
         </p>
         <a
-          href={`https://console.firebase.google.com/project/${projectId}/authentication/users`}
+          href="https://supabase.com/dashboard"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 inline-block rounded-full bg-forest-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-forest-800"
         >
-          Open Firebase → Authentication → Users ↗
+          Open Supabase → Authentication → Users ↗
         </a>
-        <Row label="Firebase project" value={projectId} mono />
+        <Row label="Supabase project URL" value={supabaseUrl} mono />
         <Row label="Allowed emails" value={allowedEmails} mono />
-        <Hint>Env vars: NEXT_PUBLIC_FIREBASE_* and NEXT_PUBLIC_ADMIN_ALLOWED_EMAILS in .env.local</Hint>
+        <Hint>Env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY and NEXT_PUBLIC_ADMIN_ALLOWED_EMAILS in .env.local</Hint>
       </Card>
 
       <Card title="Shared secret (Apps Script)">
@@ -57,7 +57,7 @@ export default function AdminSettingsPage() {
         <ul className="list-inside list-disc space-y-1.5 text-sm text-gray-600">
           <li>New restaurant or new/changed theme → rebuild + redeploy required.</li>
           <li>Menu edits, expiry changes, active toggles → live via Apps Script, no deploy needed.</li>
-          <li>Deploy command: <code className="rounded bg-canvas px-1.5 py-0.5 font-mono text-xs">npm run build &amp;&amp; firebase deploy --only hosting</code></li>
+          <li>Deploy command: <code className="rounded bg-canvas px-1.5 py-0.5 font-mono text-xs">npm run deploy</code></li>
           <li>The nightly Cloudflare Worker keeps billing state in sync across sheets.</li>
         </ul>
         <Link href="/admin" className="mt-4 inline-block text-sm font-semibold text-forest-700 hover:underline">

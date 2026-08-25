@@ -290,7 +290,7 @@ export default function RestaurantDetail({ restaurantId }: { restaurantId: strin
             <h2 className="font-bold tracking-tight">Changing the theme?</h2>
             <p className="mt-2 text-xs leading-relaxed text-forest-200">
               New or changed themes are compiled at build time. After mapping a new theme here, run{' '}
-              <code className="rounded bg-white/10 px-1 py-0.5 font-mono">npm run build &amp;&amp; firebase deploy --only hosting</code>{' '}
+              <code className="rounded bg-white/10 px-1 py-0.5 font-mono">npm run deploy</code>{' '}
               to make it live.
             </p>
           </div>

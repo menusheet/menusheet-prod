@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { signInWithEmail } from '@/lib/firebaseAuth';
+import { signInWithEmail } from '@/lib/auth';
 import { useAuthGuard } from '@/lib/useAuthGuard';
 import { ErrorBanner, PrimaryButton, Spinner, inputClass } from '@/components/admin/ui';
 
@@ -104,9 +104,9 @@ export default function LoginPage() {
 
 function friendlyError(e: unknown): string {
   const msg = e instanceof Error ? e.message : String(e);
-  if (/auth\/invalid-credential|auth\/wrong-password/i.test(msg)) return 'Incorrect email or password.';
-  if (/auth\/user-not-found/i.test(msg)) return 'No account exists with that email.';
-  if (/auth\/too-many-requests/i.test(msg)) return 'Too many attempts — please wait a minute and retry.';
-  if (/Firebase is not configured/i.test(msg)) return msg;
+  if (/Invalid login credentials/i.test(msg)) return 'Incorrect email or password.';
+  if (/Email not confirmed/i.test(msg)) return 'Please verify your email before signing in.';
+  if (/Too many requests/i.test(msg)) return 'Too many attempts — please wait a minute and retry.';
+  if (/Supabase is not configured/i.test(msg)) return msg;
   return 'Sign-in failed. Please try again.';
 }
