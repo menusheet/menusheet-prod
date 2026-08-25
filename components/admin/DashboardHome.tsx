@@ -410,7 +410,7 @@ function HealthWidget({ rows }: { rows: RestaurantRecord[] | null }) {
       <div className="flex items-start justify-between">
         <h3 className="font-bold tracking-tight">Worker sync status</h3>
         <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-forest-200">
-          daily · 00:00 IST
+          daily · 00:00
         </span>
       </div>
       <p className="mt-4 font-mono text-[26px] font-bold leading-none tracking-tight">{stale}</p>

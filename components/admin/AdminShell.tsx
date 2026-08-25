@@ -243,7 +243,7 @@ function TopBar({ email, onMenuClick }: { email: string | null; onMenuClick: () 
             </span>
             <div className="hidden md:block">
               <p className="max-w-[160px] truncate text-sm font-semibold leading-tight text-gray-800">{email}</p>
-              <p className="text-[11px] leading-tight text-gray-400">Operator</p>
+              <p className="text-[11px] leading-tight text-gray-400">admin</p>
             </div>
           </div>
         </div>

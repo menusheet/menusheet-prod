@@ -36,13 +36,13 @@ export function StatCard({
     <Card className={`relative p-5 ${featured ? 'bg-forest-900 ring-0' : ''}`}>
       <span
         className={`absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full transition ${
-          featured ? 'bg-white/10 text-white' : 'bg-canvas text-gray-500'
+          featured ? 'bg-white/10 text-green' : 'bg-canvas text-gray-500'
         }`}
       >
         {icon}
       </span>
-      <p className={`text-sm font-medium ${featured ? 'text-forest-100' : 'text-gray-500'}`}>{label}</p>
-      <p className={`mt-2 text-[2rem] font-bold leading-none tracking-tight ${featured ? 'text-white' : 'text-gray-900'}`}>
+      <p className={`text-sm font-medium ${featured ? 'text-forest-400' : 'text-gray-500'}`}>{label}</p>
+      <p className={`mt-2 text-[2rem] font-bold leading-none tracking-tight ${featured ? 'text-forest-600' : 'text-gray-900'}`}>
         {value}
       </p>
       <p className={`mt-3 flex items-center gap-1.5 text-xs font-medium ${tones[captionTone]} ${featured ? '!text-forest-300' : ''}`}>
