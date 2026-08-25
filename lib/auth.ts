@@ -33,6 +33,13 @@ export async function logoutUser(): Promise<void> {
 
 export function watchAuth(callback: (user: User | null) => void): () => void {
   const supabase = getSupabase();
+
+  // Supabase's onAuthStateChange may not fire immediately on page load.
+  // Fetch the current session explicitly so we resolve the initial state fast.
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    callback(session?.user ?? null);
+  });
+
   const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
     callback(session?.user ?? null);
   });
