@@ -8,11 +8,11 @@
     "build": "next build",
     "lint": "next lint",
     "sync-data": "node scripts/generate-static-data.js",
-    "deploy": "npm run build && firebase deploy --only hosting"
+    "deploy": "npm run build && npx wrangler pages deploy out --project-name=menusheet"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.4",
     "dotenv": "^17.4.2",
-    "firebase": "^10.14.1",
     "next": "^16.3.2",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",

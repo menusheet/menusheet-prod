@@ -1,0 +1,9 @@
+/r/*
+  Cache-Control: public, max-age=300
+
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable

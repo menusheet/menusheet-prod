@@ -3,14 +3,14 @@
 QR-code digital menu SaaS for restaurants — **₹100/month**. Owners manage their menu in
 their own Google Sheet; customers scan a QR code and get a fast, branded menu page.
 No backend server anywhere: Google Sheets is the database, Apps Script is the API,
-a Cloudflare Worker is the only cron logic, and Firebase Hosting serves a fully static
-Next.js export.
+a Cloudflare Worker is the only cron logic, and Cloudflare Pages serves a fully static
+Next.js export with free unlimited bandwidth.
 
 ## Architecture
 
 ```
 Restaurant Sheet ──Apps Script──► /r/{id} page (static export + live client fetch)
-Admin Sheet ──Admin Apps Script──► Admin Dashboard (Firebase Auth + allow-list)
+Admin Sheet ──Admin Apps Script──► Admin Dashboard (Supabase Auth + allow-list)
                 ▲                        │
                 └── Cloudflare Worker ───┘   (daily 00:00 IST reconciliation cron)
 ```
@@ -20,8 +20,8 @@ Admin Sheet ──Admin Apps Script──► Admin Dashboard (Firebase Auth + al
   localStorage cache (6 h TTL) so repeat QR scans never hit quota.
 - **Billing state** lives in the Admin Sheet (source of truth). The Worker reconciles
   every restaurant's Settings tab nightly and auto-deactivates expired accounts.
-- **Admin Dashboard** (`/admin`, unlisted + noindex) uses Firebase Authentication with a
-  hard email allow-list. The Firebase SDK is code-split into admin chunks only.
+- **Admin Dashboard** (`/admin`, unlisted + noindex) uses Supabase Authentication with a
+  hard email allow-list. The Supabase SDK is code-split into admin chunks only.
 
 ```
 ├── app/                     # Next.js App Router (output: 'export')
@@ -53,7 +53,7 @@ npm run dev                  # http://localhost:3000 — demo restaurant works w
 ## Deploy
 
 ```bash
-npm run build && firebase deploy --only hosting
+npm run deploy
 ```
 
 `prebuild` pulls fresh data from your Admin Sheet when `ADMIN_APPS_SCRIPT_URL` +

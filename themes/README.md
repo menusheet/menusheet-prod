@@ -41,7 +41,7 @@ themes/
 5. Rebuild + redeploy:
 
    ```
-   npm run build && firebase deploy --only hosting
+   npm run deploy
    ```
 
 Themes are statically imported at build time (required for pure static export), so a

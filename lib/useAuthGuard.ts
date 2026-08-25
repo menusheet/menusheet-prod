@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { isAllowedEmail, logoutUser, watchAuth } from '@/lib/firebaseAuth';
+import { isAllowedEmail, logoutUser, watchAuth } from '@/lib/auth';
 
 export type AuthStatus = 'loading' | 'anon' | 'denied' | 'ok';
 
@@ -29,12 +29,12 @@ export function useAuthGuard(): AuthGuardState {
           return;
         }
         if (!isAllowedEmail(user.email)) {
-          const email = user.email;
+          const email = user.email ?? null;
           setState({ status: 'denied', email, deniedEmail: email });
           void logoutUser();
           return;
         }
-        setState({ status: 'ok', email: user.email, deniedEmail: null });
+        setState({ status: 'ok', email: user.email ?? null, deniedEmail: null });
       });
     } catch {
       if (!cancelled) {
