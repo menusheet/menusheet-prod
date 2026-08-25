@@ -1,17 +1,18 @@
 {
   "name": "Thottara Kitchen",
   "colors": {
-    "amber": "#FF9F1C",
-    "emerald": "#0B6E4F",
-    "coral": "#E4572E",
-    "bg": "#F4F5F1",
+    "primary": "#1F5A3A",
+    "accent": "#C59A52",
+    "bg": "#F8F4ED",
     "surface": "#FFFFFF",
-    "text": "#15130F",
-    "muted": "#78766F"
+    "text": "#1A2E1A",
+    "muted": "#6B7A6B"
   },
   "fonts": {
+    "heading": "Playfair Display",
     "body": "Inter",
-    "bodyWeights": "400;500;600;700;800"
+    "headingWeights": "500;600;700",
+    "bodyWeights": "400;500;600"
   },
   "logoUrl": "https://www.thottarakitchen.com/assets/logo-CFQU8Yh0.jpg",
   "heroImageUrl": "https://www.thottarakitchen.com/assets/restaurant_night_view-VSMtC-RD.jpg",
