@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T05:11:53.058Z",
+  "generatedAt": "2026-08-25T06:11:26.810Z",
   "source": "live",
   "restaurants": [
     {
@@ -22,9 +22,9 @@
       "owner_contact": "9207624728",
       "appscript_url": "https://script.google.com/macros/s/AKfycbx__j39nHVUdMwz4XjwVD3tGcqIzvN_MqESgbg-AeLFYPJb6A1psOsbOmmyfHWi6Gc6wg/exec",
       "sheet_id": "10AzosUoU1m9ALfVA-qnbtR2_raS9DKHqMiJ72nP0y28",
-      "theme_key": "demo",
+      "theme_key": "thottara-kitchen",
       "active": "TRUE",
-      "expiry_date": "2026-09-24",
+      "expiry_date": "2026-09-28",
       "plan_amount": 100,
       "onboarded_at": "2026-08-25",
       "last_checked_at": "",

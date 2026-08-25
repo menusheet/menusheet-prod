@@ -1,0 +1,19 @@
+{
+  "name": "Thottara Kitchen",
+  "colors": {
+    "amber": "#FF9F1C",
+    "emerald": "#0B6E4F",
+    "coral": "#E4572E",
+    "bg": "#F4F5F1",
+    "surface": "#FFFFFF",
+    "text": "#15130F",
+    "muted": "#78766F"
+  },
+  "fonts": {
+    "body": "Inter",
+    "bodyWeights": "400;500;600;700;800"
+  },
+  "logoUrl": "https://www.thottarakitchen.com/assets/logo-CFQU8Yh0.jpg",
+  "heroImageUrl": "https://www.thottarakitchen.com/assets/restaurant_night_view-VSMtC-RD.jpg",
+  "tagline": "Premium Kerala heritage cuisine overlooking the lush Thottara Puncha paddy fields"
+}
