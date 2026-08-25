@@ -81,3 +81,23 @@ export async function updateRestaurant(
   const data = await gasPost('updateRestaurant', fields as Record<string, unknown>);
   return normalizeRestaurantOut((data.restaurant as RestaurantRecord) ?? null);
 }
+
+export async function pushSettingsToRestaurant(
+  appscriptUrl: string,
+  settings: { menu_active?: boolean; expiry_date?: string; restaurant_name?: string }
+): Promise<void> {
+  if (!appscriptUrl) return;
+  const payload: Record<string, unknown> = {};
+  if (settings.menu_active !== undefined) payload.menu_active = settings.menu_active ? 'TRUE' : 'FALSE';
+  if (settings.expiry_date !== undefined) payload.expiry_date = settings.expiry_date;
+  if (settings.restaurant_name !== undefined) payload.restaurant_name = settings.restaurant_name;
+  if (Object.keys(payload).length === 0) return;
+  const res = await fetch(appscriptUrl, {
+    method: 'POST',
+    redirect: 'follow',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ key: SECRET, action: 'updateSettings', payload }),
+  });
+  const data = (await res.json()) as Record<string, unknown>;
+  if (data.error) throw new Error(String(data.error));
+}

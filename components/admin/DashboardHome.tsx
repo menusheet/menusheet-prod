@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import manifestJson from '@/data/restaurants.json';
-import { listRestaurants, updateRestaurant } from '@/lib/adminApi';
+import { listRestaurants, pushSettingsToRestaurant, updateRestaurant } from '@/lib/adminApi';
 import { daysLeft, formatDate } from '@/lib/date';
 import type { RestaurantRecord } from '@/lib/types';
 import {
@@ -98,6 +98,7 @@ export default function DashboardHome() {
     );
     try {
       await updateRestaurant({ restaurant_id: row.restaurant_id, active: !row.active });
+      await pushSettingsToRestaurant(row.appscript_url, { menu_active: !row.active }).catch(() => {});
       showToast(`${row.restaurant_name} is now ${!row.active ? 'active' : 'inactive'}`);
     } catch (e) {
       setRows((prev) =>

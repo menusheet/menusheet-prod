@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T19:26:17.276Z",
+  "generatedAt": "2026-08-25T05:11:53.058Z",
   "source": "live",
   "restaurants": [
     {
@@ -9,12 +9,26 @@
       "appscript_url": "https://script.google.com/macros/s/AKfycbwbDHIQcHW7QAXAVMCEcHc8PCtrb_IdHNpktRX_GeiO2u2O3yAb6hYEAEexm-ZpQbEznQ/exec",
       "sheet_id": "12Ej5Vcod72geZ3RGCO0jPf_8XlfP37XKfhyZeoAxuQA",
       "theme_key": "demo",
-      "active": "TRUE",
+      "active": "FALSE",
       "expiry_date": "2026-09-23",
       "plan_amount": 100,
       "onboarded_at": "2026-08-25",
       "last_checked_at": "",
       "notes": "nothing"
+    },
+    {
+      "restaurant_id": "thottara-kitchen",
+      "restaurant_name": "Thottara Kitchen",
+      "owner_contact": "9207624728",
+      "appscript_url": "https://script.google.com/macros/s/AKfycbx__j39nHVUdMwz4XjwVD3tGcqIzvN_MqESgbg-AeLFYPJb6A1psOsbOmmyfHWi6Gc6wg/exec",
+      "sheet_id": "10AzosUoU1m9ALfVA-qnbtR2_raS9DKHqMiJ72nP0y28",
+      "theme_key": "demo",
+      "active": "TRUE",
+      "expiry_date": "2026-09-24",
+      "plan_amount": 100,
+      "onboarded_at": "2026-08-25",
+      "last_checked_at": "",
+      "notes": ""
     }
   ]
 }

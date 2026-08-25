@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { listRestaurants, updateRestaurant } from '@/lib/adminApi';
+import { listRestaurants, pushSettingsToRestaurant, updateRestaurant } from '@/lib/adminApi';
 import { daysLeft, formatDate, formatDateTime } from '@/lib/date';
 import { publicMenuUrl } from '@/lib/siteUrl';
 import type { RestaurantRecord } from '@/lib/types';
@@ -107,6 +107,10 @@ export default function RestaurantDetail({ restaurantId }: { restaurantId: strin
         notes: notes.trim(),
       });
       setRecord(updated);
+      await pushSettingsToRestaurant(record.appscript_url, {
+        menu_active: active,
+        expiry_date: expiryDate,
+      }).catch(() => {});
       showToast('Saved to the Admin Sheet');
     } catch (e) {
       showToast(e instanceof Error ? e.message : 'Save failed');

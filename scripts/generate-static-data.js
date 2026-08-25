@@ -61,8 +61,6 @@ function normalizeRow(raw) {
 }
 
 async function main() {
-  fs.mkdirSync(MENUS_DIR, { recursive: true });
-
   let rows = [];
   let source = 'seed';
 
