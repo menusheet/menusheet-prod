@@ -347,7 +347,7 @@ export default function LandingPage() {
               </p>
               <div className="relative mt-8 flex flex-wrap items-center justify-center gap-4">
                 <a
-                  href="https://wa.me/919999999999?text=Hi%20MenuSheet!%20I%27d%20like%20a%20QR%20menu%20for%20my%20restaurant."
+                  href="https://wa.me/919207624728?text=Hi%20MenuSheet!%20I%27d%20like%20a%20QR%20menu%20for%20my%20restaurant."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-full bg-white px-7 py-3.5 text-base font-semibold text-forest-900 shadow-float transition hover:bg-forest-50"
