@@ -9,10 +9,6 @@ import type { MenuPayload, MenuItem } from '@/lib/types';
 
 export const dynamicParams = false;
 
-interface Params {
-  params: { id: string };
-}
-
 export function generateStaticParams() {
   try {
     return loadManifest().restaurants.map((r) => ({ id: r.restaurant_id }));
@@ -41,8 +37,9 @@ function googleFontsUrl(theme: ReturnType<typeof getTheme>): string | null {
   return `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap`;
 }
 
-export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const record = getRestaurant(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const record = getRestaurant(id);
   if (!record) return { title: 'Menu not found' };
   const theme = getTheme(record.theme_key);
   const name = theme.config.name || record.restaurant_name;
@@ -50,7 +47,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     `View the digital menu for ${name}` +
     (theme.config.tagline ? ` — ${theme.config.tagline}` : '') +
     '. Scan, browse and order with MenuSheet.';
-  const url = `${siteUrl()}/r/${params.id}`;
+  const url = `${siteUrl()}/r/${id}`;
   const images = theme.config.heroImageUrl ? [theme.config.heroImageUrl] : undefined;
   return {
     title: `${name} — Menu`,
@@ -74,8 +71,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-export async function generateViewport({ params }: Params): Promise<Viewport> {
-  const record = getRestaurant(params.id);
+export async function generateViewport({ params }: { params: Promise<{ id: string }> }): Promise<Viewport> {
+  const { id } = await params;
+  const record = getRestaurant(id);
   const theme = getTheme(record?.theme_key || 'demo');
   return {
     width: 'device-width',
@@ -84,14 +82,15 @@ export async function generateViewport({ params }: Params): Promise<Viewport> {
   };
 }
 
-export default function RestaurantMenuPage({ params }: Params) {
-  const record = getRestaurant(params.id);
+export default async function RestaurantMenuPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const record = getRestaurant(id);
   if (!record) notFound();
   const theme = getTheme(record.theme_key);
-  const { payload } = buildInitialPayload(params.id);
+  const { payload } = buildInitialPayload(id);
   const fontsUrl = googleFontsUrl(theme);
 
-  const jsonLd = buildJsonLd(params.id, record.restaurant_name, theme.config.name, theme.config.heroImageUrl, payload.menu ?? []);
+  const jsonLd = buildJsonLd(id, record.restaurant_name, theme.config.name, theme.config.heroImageUrl, payload.menu ?? []);
 
   return (
     <>
@@ -107,7 +106,7 @@ export default function RestaurantMenuPage({ params }: Params) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <MenuPageClient
-        restaurantId={params.id}
+        restaurantId={id}
         themeKey={record.theme_key}
         appscriptUrl={record.appscript_url || ''}
         initialPayload={payload}

@@ -132,7 +132,7 @@ function Sidebar({
               <NavLink key={item.href} {...item} active={isActive(item.href)} onClick={onClose} className={linkClass} />
             ))}
             <a
-              href="https://wa.me/919999999999"
+              href="https://wa.me/919207624728"
               target="_blank"
               rel="noopener noreferrer"
               className={linkClass(false)}
