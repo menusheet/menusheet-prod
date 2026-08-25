@@ -11,6 +11,7 @@
     "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "firebase": "^10.14.1",
     "next": "^14.2.32",
     "qrcode": "^1.5.4",

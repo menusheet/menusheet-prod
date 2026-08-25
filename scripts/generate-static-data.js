@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+require('dotenv').config({ path: '.env.local' });
+
 /**
  * MenuSheet build-time data sync.
  *

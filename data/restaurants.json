@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-08-24T08:25:58.441Z",
-  "source": "seed",
+  "generatedAt": "2026-08-24T19:26:17.276Z",
+  "source": "live",
   "restaurants": [
     {
-      "restaurant_id": "demo",
-      "restaurant_name": "The Green Fork",
-      "owner_contact": "+91 98765 43210",
-      "appscript_url": "",
-      "sheet_id": "",
+      "restaurant_id": "test",
+      "restaurant_name": "test",
+      "owner_contact": "9207624728",
+      "appscript_url": "https://script.google.com/macros/s/AKfycbwbDHIQcHW7QAXAVMCEcHc8PCtrb_IdHNpktRX_GeiO2u2O3yAb6hYEAEexm-ZpQbEznQ/exec",
+      "sheet_id": "12Ej5Vcod72geZ3RGCO0jPf_8XlfP37XKfhyZeoAxuQA",
       "theme_key": "demo",
       "active": "TRUE",
-      "expiry_date": "2099-12-31",
+      "expiry_date": "2026-09-23",
       "plan_amount": 100,
-      "onboarded_at": "2026-08-24",
+      "onboarded_at": "2026-08-25",
       "last_checked_at": "",
-      "notes": "Built-in sample restaurant for the landing page preview."
+      "notes": "nothing"
     }
   ]
 }
